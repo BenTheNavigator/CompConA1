@@ -27,3 +27,6 @@ replay_pid*
 .DS_Store
 .AppleDouble
 .LSOverride
+
+# ANTLR4
+**/Makefile
