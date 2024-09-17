@@ -30,3 +30,8 @@ replay_pid*
 
 # ANTLR4
 **/Makefile
+**/*.jar
+**/*.java
+**/*.tokens
+**/*.interp
+
