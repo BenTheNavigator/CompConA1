@@ -2,7 +2,7 @@ grammar cc;
 
 // grammatik  parser
 
-start : hardwareResult inputsResult outputsResult latchesResult optDef updatesResult simInputsResult EOF;
+start : hardwareResult inputsResult outputsResult latchesResult optDef* updatesResult simInputsResult EOF;
 
 hardwareResult : 'hardware' COLON IDENT;
 
@@ -12,7 +12,7 @@ outputsResult : 'outputs' COLON signalList;
 
 latchesResult : 'latches' COLON signalList;
 
-updatesResult : 'updates' COLON IDENT EQUAL exp;
+updatesResult : 'updates' COLON (IDENT EQUAL exp)*;
 
 optDef : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*;
 
@@ -28,7 +28,7 @@ exp : IDENT
 
 simInputsResult: 'siminputs' COLON IDENT EQUAL NUMBER;
 
-signalList : IDENT (',' IDENT)*; 
+signalList : IDENT*; 
 
 
 // TOKENS  lexer
@@ -44,3 +44,4 @@ IDENT: [a-zA-Z_][a-zA-Z0-9_]* [']?;
 
 WHITESPACES: [ \t\r\n]+ -> skip;
 COMMENT: '//' ~[\r\n\t]* -> skip;
+MULTILINE_COMMENT: '/*' .*? '*/' -> skip; 
