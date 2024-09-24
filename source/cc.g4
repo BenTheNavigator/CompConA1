@@ -2,7 +2,7 @@ grammar cc;
 
 // grammatik  parser
 
-start : hardwareResult inputsResult outputsResult latchesResult updatesResult simInputsResult EOF;
+start : hardwareResult inputsResult outputsResult latchesResult optDef updatesResult simInputsResult EOF;
 
 hardwareResult : 'hardware' COLON IDENT;
 
@@ -14,7 +14,7 @@ latchesResult : 'latches' COLON signalList;
 
 updatesResult : 'updates' COLON IDENT EQUAL exp;
 
-optDef : (IDENT'(' signalList ')' EQUAL exp)*;
+optDef : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*;
 
 exp : IDENT
      |NOT exp
