@@ -23,6 +23,7 @@ exp : IDENT
      |exp OR exp
      |IDENT'('exp')'
      |'(' exp ')'
+     |exp','
      ;
 
 simInputsResult: 'siminputs' COLON IDENT EQUAL NUMBER;
