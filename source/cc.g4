@@ -1,23 +1,29 @@
 grammar cc;
 
-start : hardwareResult inputsResult outputsResult latchesResult updatesResult simInputsResult EOF;
+start : hardwareResult inputsResult outputsResult latchesResult defResult updatesResult simInputsResult EOF;
 
 hardwareResult : 'hardware' COLON IDENT;
-
 inputsResult : 'inputs' COLON signalList;
-
 outputsResult : 'outputs' COLON signalList;
-
 latchesResult : 'latches' COLON signalList;
-
+defResult : 'def' COLON  defList;
 updatesResult : 'updates' COLON updateList;
-updateList : IDENT EQUAL expr+;
-expr : NOT IDENT APOSTROPHE* (AND expr)*;
-
 simInputsResult: 'siminputs' COLON simInputList;
-simInputList: IDENT EQUAL NUMBER+;
 
+
+defList :  IDENT '(' IDENT (',' IDENT)+ ')' EQUAL expr;
+updateList : IDENT EQUAL expr;
+simInputList: IDENT EQUAL NUMBER+;
 signalList : IDENT (',' IDENT)*; 
+
+expr : NOT expr
+     | IDENT APOSTROPHE*
+     | expr AND expr 
+     | expr OR expr 
+     | expr expr  
+     | '(' expr ')'
+     ;
+
 
 
 AND: '*';
