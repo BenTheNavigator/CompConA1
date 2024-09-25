@@ -26,9 +26,9 @@ exp : IDENT
      |exp','
      ;
 
-simInputsResult: 'siminputs' COLON IDENT EQUAL NUMBER;
+simInputsResult: 'siminputs' COLON (IDENT EQUAL NUMBER)*;
 
-signalList : IDENT*; 
+signalList : (IDENT (','IDENT)*)*; 
 
 
 // TOKENS  lexer
