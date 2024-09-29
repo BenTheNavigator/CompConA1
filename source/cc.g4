@@ -1,39 +1,44 @@
 grammar cc;
 
-start : hardwareResult inputsResult outputsResult latchesResult defResult updatesResult simInputsResult EOF;
+// grammatik  parser
+
+start : hardwareResult inputsResult outputsResult latchesResult optDef* updatesResult simInputsResult EOF;
 
 hardwareResult : 'hardware' COLON IDENT;
 inputsResult : 'inputs' COLON signalList;
 outputsResult : 'outputs' COLON signalList;
 latchesResult : 'latches' COLON signalList;
-defResult : 'def' COLON  defList;
-updatesResult : 'updates' COLON updateList;
-simInputsResult: 'siminputs' COLON simInputList;
 
+updatesResult : 'updates' COLON (IDENT EQUAL exp)*;
 
-defList :  IDENT '(' IDENT (',' IDENT)+ ')' EQUAL expr;
-updateList : IDENT EQUAL expr;
-simInputList: IDENT EQUAL NUMBER+;
-signalList : IDENT (',' IDENT)*; 
+optDef : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*;
 
-expr : NOT expr
-     | IDENT APOSTROPHE*
-     | expr AND expr 
-     | expr OR expr 
-     | expr expr  
-     | '(' expr ')'
+simInputsResult: 'siminputs' COLON (IDENT EQUAL NUMBER)*;
+
+signalList : (IDENT (','IDENT)*)*; 
+
+exp : IDENT
+     |NOT exp
+     |exp AND exp
+     |exp exp
+     |exp OR exp
+     |IDENT'('exp')'
+     |'(' exp ')'
+     |exp','
      ;
 
 
+// TOKENS  lexer
 
+NOT: '/';
 AND: '*';
 OR: '+';
-NOT: '/';
 NUMBER: [0-1]+;
 APOSTROPHE: '\'';
 COLON: ':';
 EQUAL: '=';
-IDENT: [a-zA-Z_][a-zA-Z0-9_]*;
+IDENT: [a-zA-Z_][a-zA-Z0-9_]* [']?;
 
 WHITESPACES: [ \t\r\n]+ -> skip;
 COMMENT: '//' ~[\r\n\t]* -> skip;
+MULTILINE_COMMENT: '/*' .*? '*/' -> skip; 
