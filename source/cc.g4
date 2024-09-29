@@ -5,16 +5,17 @@ grammar cc;
 start : hardwareResult inputsResult outputsResult latchesResult optDef* updatesResult simInputsResult EOF;
 
 hardwareResult : 'hardware' COLON IDENT;
-
 inputsResult : 'inputs' COLON signalList;
-
 outputsResult : 'outputs' COLON signalList;
-
 latchesResult : 'latches' COLON signalList;
 
 updatesResult : 'updates' COLON (IDENT EQUAL exp)*;
 
 optDef : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*;
+
+simInputsResult: 'siminputs' COLON (IDENT EQUAL NUMBER)*;
+
+signalList : (IDENT (','IDENT)*)*; 
 
 exp : IDENT
      |NOT exp
@@ -25,10 +26,6 @@ exp : IDENT
      |'(' exp ')'
      |exp','
      ;
-
-simInputsResult: 'siminputs' COLON (IDENT EQUAL NUMBER)*;
-
-signalList : (IDENT (','IDENT)*)*; 
 
 
 // TOKENS  lexer
