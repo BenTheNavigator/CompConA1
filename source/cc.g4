@@ -2,22 +2,22 @@ grammar cc;
 
 // grammatik  parser
 
-start : hardwareResult inputsResult outputsResult latchesResult optDef* updatesResult simInputsResult EOF;
+start : hardwareResult inputsResult outputsResult latchesResult defResult* updatesResult simInputsResult EOF;
 
 hardwareResult : 'hardware' COLON IDENT;
 inputsResult : 'inputs' COLON signalList;
 outputsResult : 'outputs' COLON signalList;
 latchesResult : 'latches' COLON signalList;
-
 updatesResult : 'updates' COLON (IDENT EQUAL exp)*;
-
-optDef : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*;
+defResult : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*; // is def a signal?
 
 simInputsResult: 'siminputs' COLON (IDENT EQUAL NUMBER)*;
 
-signalList : (IDENT (','IDENT)*)*; 
+signalList : (IDENT (','IDENT)*)*; // make change if def is not a signal
 
-exp : IDENT
+
+// ambuigous question? what more to do with the exp?
+exp : IDENT APOSTROPHE?
      |NOT exp
      |exp AND exp
      |exp exp
@@ -37,7 +37,7 @@ NUMBER: [0-1]+;
 APOSTROPHE: '\'';
 COLON: ':';
 EQUAL: '=';
-IDENT: [a-zA-Z_][a-zA-Z0-9_]* [']?;
+IDENT: [a-zA-Z_][a-zA-Z0-9_]*;
 
 WHITESPACES: [ \t\r\n]+ -> skip;
 COMMENT: '//' ~[\r\n\t]* -> skip;
