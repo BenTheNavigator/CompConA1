@@ -9,26 +9,27 @@ import java.util.List;
 public class main {
     public static void main(String[] args) throws IOException{
 
+		System.out.println("Hello Worldd");
 	// we expect exactly one argument: the name of the input file
 	if (args.length!=1) {
 	    System.err.println("\n");
 	    System.err.println("Please give as input argument a filename\n");
 	    System.exit(-1);
 	}
-	String filename=args[0];
+	String filename="cc.txt";
 
 	// open the input file
 	CharStream input = CharStreams.fromFileName(filename);
 	    //new ANTLRFileStream (filename); // depricated
 	
 	// create a lexer/scanner
-	progLexer lex = new progLexer(input);
+	ccLexer lex = new ccLexer(input);
 	
 	// get the stream of tokens from the scanner
 	CommonTokenStream tokens = new CommonTokenStream(lex);
 	
 	// create a parser
-	progParser parser = new progParser(tokens);
+	ccParser parser = new ccParser(tokens);
 	
 	// and parse anything from the grammar for "start"
 	ParseTree parseTree = parser.start();
@@ -46,19 +47,19 @@ public class main {
 // simply a Double.
 
 class Interpreter extends AbstractParseTreeVisitor<Double>
-                  implements progVisitor<Double> {
+                  implements ccVisitor<Double> {
     // todo - Java will complain that "Interpreter" does not in fact
     // implement "implVisitor" at the moment.
 
 
-	public Double visitStart(progParser.StartContext ctx){
+	public Double visitStart(ccParser.StartContext ctx){
 	    return visit(ctx.e);
 	}
-	public Double visitVariable(progParser.VariableContext ctx){
+	public Double visitVariable(ccParser.VariableContext ctx){
 	    System.err.println("Variables are not yet supported.\n");
 	    System.exit(-1);
 	    return null; }
-	public Double visitAddSub(progParser.AddSubContext ctx){
+	public Double visitAddSub(ccParser.AddSubContext ctx){
 	    // e1=exp op=('+'|'-') e2=exp
 	    System.out.println("Addition/Subtraction");
 	    Double d1=visit(ctx.e1);
@@ -72,13 +73,13 @@ class Interpreter extends AbstractParseTreeVisitor<Double>
 		return d1-d2;
 	    }
 	}
-	public Double visitConstant(progParser.ConstantContext ctx){
+	public Double visitConstant(ccParser.ConstantContext ctx){
 	    String s=ctx.f.getText();
 	    System.out.println("Constant "+s);
 	    return Double.valueOf(s);
 	}
-	public Double visitParen(progParser.ParenContext ctx){ return visit(ctx.e); }
-	public Double visitMultDiv(progParser.MultDivContext ctx){
+	public Double visitParen(ccParser.ParenContext ctx){ return visit(ctx.e); }
+	public Double visitMultDiv(ccParser.MultDivContext ctx){
 	    System.out.println("Mult/Div");
 	    Double d1=visit(ctx.e1);
 	    Double d2=visit(ctx.e2);
