@@ -4,6 +4,7 @@ grammar cc;
 
 start : hardwareResult inputsResult outputsResult latchesResult defResult* updatesResult simInputsResult EOF;
 
+
 hardwareResult : 'hardware' COLON IDENT;
 inputsResult : 'inputs' COLON signalList;
 outputsResult : 'outputs' COLON signalList;
@@ -17,14 +18,14 @@ signalList : (IDENT (','IDENT)*)*; // make change if def is not a signal
 
 
 // ambuigous question? what more to do with the exp?
-exp : IDENT APOSTROPHE?
-     |NOT exp
+exp : NOT exp
+     |IDENT'('exp')'
      |exp AND exp
      |exp exp
      |exp OR exp
-     |IDENT'('exp')'
      |'(' exp ')'
      |exp','
+     | IDENT APOSTROPHE?
      ;
 
 
