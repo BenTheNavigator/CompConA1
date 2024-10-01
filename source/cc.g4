@@ -13,11 +13,11 @@ defResult : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*;
 
 simInputsResult: 'siminputs' COLON (IDENT EQUAL NUMBER)*;
 
-signalList : (IDENT (IDENT)*)*; 
+signalList : (IDENT (','IDENT)*)*; 
 
 
 exp : NOT exp
-     |IDENT'('exp')'
+     |IDENT '('exp (','exp)* ')'
      |exp AND exp
      |exp exp
      |exp OR exp
@@ -42,4 +42,3 @@ IDENT: [a-zA-Z_][a-zA-Z0-9_]*;
 WHITESPACES: [ \t\r\n]+ -> skip;
 COMMENT: '//' ~[\r\n\t]* -> skip;
 MULTILINE_COMMENT: '/*' .*? '*/' -> skip; 
-COMMAS: ',' -> skip;
