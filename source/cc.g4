@@ -4,33 +4,32 @@ grammar cc;
 
 start : hardwareResult inputsResult outputsResult latchesResult defResult* updatesResult simInputsResult EOF;
 
-
 hardwareResult : 'hardware' COLON IDENT;
 inputsResult : 'inputs' COLON signalList;
 outputsResult : 'outputs' COLON signalList;
 latchesResult : 'latches' COLON signalList;
 updatesResult : 'updates' COLON (IDENT EQUAL exp)*;
-defResult : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*; // is def a signal?
+defResult : 'def' COLON (IDENT'(' signalList ')' EQUAL exp)*; 
 
 simInputsResult: 'siminputs' COLON (IDENT EQUAL NUMBER)*;
 
-signalList : (IDENT (','IDENT)*)*; // make change if def is not a signal
+signalList : (IDENT (IDENT)*)*; 
 
 
-// ambuigous question? what more to do with the exp?
 exp : NOT exp
      |IDENT'('exp')'
      |exp AND exp
      |exp exp
      |exp OR exp
      |'(' exp ')'
-     |exp','
-     | IDENT APOSTROPHE?
+     | IDENTAPOSTROPHE
+     | IDENT 
      ;
 
 
 // TOKENS  lexer
 
+IDENTAPOSTROPHE: IDENT APOSTROPHE;
 NOT: '/';
 AND: '*';
 OR: '+';
@@ -43,3 +42,4 @@ IDENT: [a-zA-Z_][a-zA-Z0-9_]*;
 WHITESPACES: [ \t\r\n]+ -> skip;
 COMMENT: '//' ~[\r\n\t]* -> skip;
 MULTILINE_COMMENT: '/*' .*? '*/' -> skip; 
+COMMAS: ',' -> skip;
