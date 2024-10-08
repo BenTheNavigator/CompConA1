@@ -46,54 +46,88 @@ public class main {
 // This is parameterized over a return type "<T>" which is in our case
 // simply a Double.
 
-class Interpreter extends AbstractParseTreeVisitor<Double>
-                  implements ccVisitor<Double> {
-    // todo - Java will complain that "Interpreter" does not in fact
-    // implement "implVisitor" at the moment.
+class Interpreter extends AbstractParseTreeVisitor<String>
+             implements ccVisitor<String> {
 
 
-	public Double visitStart(ccParser.StartContext ctx){
-	    return visit(ctx.e);
-	}
-	public Double visitVariable(ccParser.VariableContext ctx){
-	    System.err.println("Variables are not yet supported.\n");
-	    System.exit(-1);
-	    return null; }
-	public Double visitAddSub(ccParser.AddSubContext ctx){
-	    // e1=exp op=('+'|'-') e2=exp
-	    System.out.println("Addition/Subtraction");
-	    Double d1=visit(ctx.e1);
-	    Double d2=visit(ctx.e2);
-	    if (ctx.op.getText().equals("+")){
-		System.out.println("Add "+d1+" + "+d2+" = "+(d1+d2));
-		return d1+d2;
-	    }
-	    else{
-		System.out.println("Sub "+d1+" - "+d2+" = "+(d1-d2));
-		return d1-d2;
-	    }
-	}
-	public Double visitConstant(ccParser.ConstantContext ctx){
-	    String s=ctx.f.getText();
-	    System.out.println("Constant "+s);
-	    return Double.valueOf(s);
-	}
-	public Double visitParen(ccParser.ParenContext ctx){ return visit(ctx.e); }
-	public Double visitMultDiv(ccParser.MultDivContext ctx){
-	    System.out.println("Mult/Div");
-	    Double d1=visit(ctx.e1);
-	    Double d2=visit(ctx.e2);
-	    if (ctx.op.getText().equals("*")){
-		System.out.println("Mult "+d1+" * "+d2+" = "+(d1*d2));
-		return d1*d2;
-	    }
-	    else{
-		System.out.println("Div "+d1+" / "+d2+" = "+(d1/d2));				
-		return d1/d2;	
-	    }
-    
+	@Override
+	public Double visitStart(ccParser.StartContext ctx) {
+		return 0.0;
 	}
 
+	@Override
+	public String visitHardwareRes(ccParser.HardwareResContext ctx) {
+		System.out.println("Hardware");
+		return ctx.IDENT().getText();
+	}
 
+	@Override
+	public Double visitInputsRes(ccParser.InputsResContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitOutputsRes(ccParser.OutputsResContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitLatchesRes(ccParser.LatchesResContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitUpdatesRes(ccParser.UpdatesResContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitDefRes(ccParser.DefResContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitSimInputsRes(ccParser.SimInputsResContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitSignalListRes(ccParser.SignalListResContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitNOT(ccParser.NOTContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitOR(ccParser.ORContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitPARENTHESES(ccParser.PARENTHESESContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitIDENT(ccParser.IDENTContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitAND(ccParser.ANDContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitFUNCTION(ccParser.FUNCTIONContext ctx) {
+		return 0.0;
+	}
+
+	@Override
+	public Double visitIDENTAPOSTROPHE(ccParser.IDENTAPOSTROPHEContext ctx) {
+		return 0.0;
+	}
 }
-
