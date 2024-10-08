@@ -5,11 +5,13 @@ import org.antlr.v4.runtime.CharStreams;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
+
 
 public class main {
     public static void main(String[] args) throws IOException{
 
-		System.out.println("Hello Worldd");
+		
 	// we expect exactly one argument: the name of the input file
 	if (args.length!=1) {
 	    System.err.println("\n");
@@ -36,7 +38,7 @@ public class main {
 
 	// Construct an interpreter and run it on the parse tree
 	Interpreter interpreter = new Interpreter();
-	Double result=interpreter.visit(parseTree);
+	String result=interpreter.visit(parseTree);
 	System.out.println("The result is: "+result);
     }
 }
@@ -47,87 +49,109 @@ public class main {
 // simply a Double.
 
 class Interpreter extends AbstractParseTreeVisitor<String>
-             implements ccVisitor<String> {
+                  implements ccVisitor<String> {
 
+    @Override
+    public String visitAND(ccParser.ANDContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitDefRes(ccParser.DefResContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitFUNCTION(ccParser.FUNCTIONContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitHardwareRes(ccParser.HardwareResContext ctx) {
+		System.out.println("i am at hardwareRes");
+		return ctx.getText();
+    }
+
+    @Override
+    public String visitIDENT(ccParser.IDENTContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitIDENTAPOSTROPHE(ccParser.IDENTAPOSTROPHEContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitInputsRes(ccParser.InputsResContext ctx) {
+        return "";
+    }
+
+    @Override
+    public String visitLatchesRes(ccParser.LatchesResContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitNOT(ccParser.NOTContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitOR(ccParser.ORContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitOutputsRes(ccParser.OutputsResContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitPARENTHESES(ccParser.PARENTHESESContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitSignalListRes(ccParser.SignalListResContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitSimInputsRes(ccParser.SimInputsResContext ctx) {
+        // TODO Auto-generated method stub
+        return "i am here";
+    }
+
+    @Override
+    public String visitStart(ccParser.StartContext ctx) {
+		String res = visit(ctx.hardwareResult());
+
+        return res;
+    }
+
+    @Override
+    public String visitUpdatesRes(ccParser.UpdatesResContext ctx) {
+        return "i am here";
+    }
 
 	@Override
-	public Double visitStart(ccParser.StartContext ctx) {
-		return 0.0;
+	public String visitEXPRESSIONS(ccParser.EXPRESSIONSContext ctx) {
+		// TODO Auto-generated method stub
+		return "exp";
 	}
 
-	@Override
-	public String visitHardwareRes(ccParser.HardwareResContext ctx) {
-		System.out.println("Hardware");
-		return ctx.IDENT().getText();
-	}
 
-	@Override
-	public Double visitInputsRes(ccParser.InputsResContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitOutputsRes(ccParser.OutputsResContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitLatchesRes(ccParser.LatchesResContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitUpdatesRes(ccParser.UpdatesResContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitDefRes(ccParser.DefResContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitSimInputsRes(ccParser.SimInputsResContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitSignalListRes(ccParser.SignalListResContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitNOT(ccParser.NOTContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitOR(ccParser.ORContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitPARENTHESES(ccParser.PARENTHESESContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitIDENT(ccParser.IDENTContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitAND(ccParser.ANDContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitFUNCTION(ccParser.FUNCTIONContext ctx) {
-		return 0.0;
-	}
-
-	@Override
-	public Double visitIDENTAPOSTROPHE(ccParser.IDENTAPOSTROPHEContext ctx) {
-		return 0.0;
-	}
 }
+
