@@ -60,13 +60,17 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
      @Override
     public String visitStart(ccParser.StartContext ctx) {
+		// boilerplate html code
 		html.append("<!DOCTYPE html>\n<html><head><title>")
-            .append("Circuit Specification")  // Replace this with the actual title if available
+            .append("TITLE")  // Replace this with the actual title if available
             .append("</title>\n<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>\n")
             .append("<script type=\"text/javascript\" id=\"MathJax-script\"\nasync src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js\">\n")
             .append("</script></head><body>\n");
 
-        
+        // <h1> tag hardware:
+		html.append("<h1>").append(visit(ctx.hardwareResult())).append("</h1>\n");
+
+
         // End the HTML
         html.append("</body></html>");
 
@@ -93,8 +97,7 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitHardwareRes(ccParser.HardwareResContext ctx) {
-		System.out.println("i am at hardwareRes");
-		return ctx.getText();
+		return ctx.x.getText();
     }
 
     @Override
