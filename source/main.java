@@ -130,13 +130,12 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitSimInputsRes(ccParser.SimInputsResContext ctx) {
-        // TODO Auto-generated method stub
-        return "i am here";
+        return ctx.getText();
     }
 
     @Override
     public String visitStart(ccParser.StartContext ctx) {
-		String res = visit(ctx.hardwareResult());
+		String res = visit(ctx.simInputsResult());
 
         return res;
     }

@@ -4,26 +4,24 @@ grammar cc;
 
 start : hardwareResult inputsResult outputsResult latchesResult defResult* updatesResult simInputsResult EOF;
 
-hardwareResult : h='hardware' COLON x=IDENT                          # hardwareRes ;
-inputsResult   : i='inputs' COLON signalList                       # inputsRes ;
-outputsResult : o='outputs' COLON signalList                       # outputsRes ;   
-latchesResult : l='latches' COLON signalList                       # latchesRes ;         
-updatesResult : u='updates' COLON (IDENT EQUAL exp)*               # updatesRes ;
-defResult : d='def' COLON (x=IDENT'(' signalList ')' EQUAL exp)*     # defRes ;
-
-simInputsResult: s='siminputs' COLON (IDENT EQUAL NUMBER)*         # simInputsRes ;    
-
-signalList : (x=IDENT (','x=IDENT)*)*                                # signalListRes ;
+hardwareResult : h='hardware' COLON x=IDENT                          #hardwareRes;
+inputsResult   : i='inputs' COLON signalList                         #inputsRes;
+outputsResult : o='outputs' COLON signalList                         #outputsRes;   
+latchesResult : l='latches' COLON signalList                         #latchesRes;         
+updatesResult : u='updates' COLON (IDENT EQUAL exp)*                 #updatesRes;
+defResult : d='def' COLON (x=IDENT'(' signalList ')' EQUAL exp)*     #defRes;
+simInputsResult: s='siminputs' COLON (IDENT EQUAL NUMBER)*           #simInputsRes;    
+signalList : (x=IDENT (','x=IDENT)*)*                                #signalListRes;
 
 
-exp : NOT exp                      # NOT 
-     |x=IDENT e1=exps   # FUNCTION
+exp : NOT exp                            #NOT 
+     |x=IDENT e1=exps                    #FUNCTION
      |e1=exp AND e2=exp                  #AND
      |e1=exp e2=exp                      #AND
-     |e1=exp OR e2=exp                   # OR
-     |'(' e1=exp ')'                  # PARENTHESES
-     | y=IDENTAPOSTROPHE             # IDENTAPOSTROPHE
-     | x=IDENT                       # IDENT
+     |e1=exp OR e2=exp                   #OR
+     |'(' e1=exp ')'                     #PARENTHESES
+     | y=IDENTAPOSTROPHE                 #IDENTAPOSTROPHE
+     | x=IDENT                           #IDENT
      ;
 
 
