@@ -8,8 +8,8 @@ hardwareResult : h='hardware' COLON x=IDENT                          #hardwareRe
 inputsResult   : i='inputs' COLON signalList                         #inputsRes;
 outputsResult : o='outputs' COLON signalList                         #outputsRes;   
 latchesResult : l='latches' COLON signalList                         #latchesRes;         
-updatesResult : u='updates' COLON (IDENT EQUAL exp)*                 #updatesRes;
-defResult : d='def' COLON (x=IDENT'(' signalList ')' EQUAL exp)*     #defRes;
+updatesResult : u='updates' COLON (x=IDENT EQUAL e=exp)*                 #updatesRes;
+defResult : d='def' COLON (x=IDENT'(' signalList ')' EQUAL e=exp)*     #defRes;
 simInputsResult: s='siminputs' COLON (IDENT EQUAL NUMBER)*           #simInputsRes;    
 signalList : (x=IDENT (','x=IDENT)*)*                                #signalListRes;
 
