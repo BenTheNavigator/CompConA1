@@ -70,6 +70,19 @@ class Interpreter extends AbstractParseTreeVisitor<String>
         // <h1> tag hardware:
 		html.append("<h1>").append(visit(ctx.hardwareResult())).append("</h1>\n");
 
+		// <h2> tags
+		html.append("<h2> Inputs </h2>\n").append(visit(ctx.inputsResult())).append("\n");
+		html.append("<h2> Outputs </h2>\n").append(visit(ctx.outputsResult())).append("\n");
+		html.append("<h2> Latches </h2>\n").append(visit(ctx.latchesResult())).append("\n");
+		// html.append("<h2> Definitions </h2>\n").append(visit(ctx.defResult())).append("\n");
+        html.append("<h2> Updates </h2>\n").append(visit(ctx.updatesResult())).append("\n");
+        html.append("<h2> Simulation inputs </h2>\n").append(visit(ctx.simInputsResult())).append("\n");
+
+
+
+
+
+
 
         // End the HTML
         html.append("</body></html>");
@@ -85,8 +98,7 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitDefRes(ccParser.DefResContext ctx) {
-        // TODO Auto-generated method stub
-        return "i am here";
+		return ctx.x.getText();
     }
 
     @Override
@@ -114,13 +126,12 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitInputsRes(ccParser.InputsResContext ctx) {
-        return "";
+		return ctx.x.getText();
     }
 
     @Override
     public String visitLatchesRes(ccParser.LatchesResContext ctx) {
-        // TODO Auto-generated method stub
-        return "i am here";
+        return ctx.x.getText();
     }
 
     @Override
@@ -137,8 +148,7 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitOutputsRes(ccParser.OutputsResContext ctx) {
-        // TODO Auto-generated method stub
-        return "i am here";
+        return ctx.x.getText();
     }
 
     @Override

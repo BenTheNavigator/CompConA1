@@ -5,13 +5,13 @@ grammar cc;
 start : hardwareResult inputsResult outputsResult latchesResult defResult* updatesResult simInputsResult EOF;
 
 hardwareResult : h='hardware' COLON x=IDENT                          #hardwareRes;
-inputsResult   : i='inputs' COLON signalList                         #inputsRes;
-outputsResult : o='outputs' COLON signalList                         #outputsRes;   
-latchesResult : l='latches' COLON signalList                         #latchesRes;         
+inputsResult   : i='inputs' COLON x=signalList                         #inputsRes;
+outputsResult : o='outputs' COLON x=signalList                         #outputsRes;   
+latchesResult : l='latches' COLON x=signalList                         #latchesRes;         
 updatesResult : u='updates' COLON (IDENT EQUAL exp)*                 #updatesRes;
 defResult : d='def' COLON (x=IDENT'(' signalList ')' EQUAL exp)*     #defRes;
 simInputsResult: s='siminputs' COLON (IDENT EQUAL NUMBER)*           #simInputsRes;    
-signalList : (x=IDENT (','x=IDENT)*)*                                #signalListRes;
+signalList : (x=IDENT (','IDENT)*)*                                #signalListRes;
 
 
 exp : NOT exp                            #NOT 
