@@ -64,7 +64,21 @@ class Interpreter extends AbstractParseTreeVisitor<String>
         String html_header = "<!DOCTYPE html>\n<html>\n<head>\n<title>Hardware Description</title>\n"
                 + "<script src=\"https://polyfill.io/v3/polyfill.min.js?features=es6\"></script>\n"
                 + "<script type=\"text/javascript\" id=\"MathJax-script\" async src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js\"></script>\n"
-                + "</head>\n<body>\n";
+                + "<style>\n"
+                + "  body {\n"
+                + "    background-color: powderblue;\n"
+                + "    display: flex;\n"
+                + "    justify-content: center;\n"
+                + "    align-items: center;\n"
+                + "    font-family: Arial, sans-serif;\n"
+                + "  }\n"
+                + "  .content {\n"
+                + "    text-align: center;\n"
+                + "  }\n"
+                + "</style>\n"
+                + "</head>\n<body>\n"
+                + "<div class=\"content\">\n"; // Start of the content div
+
 
         String htmlOutput = html_header;
         htmlOutput += visit(ctx.hardwareResult()) + "\n";
@@ -130,21 +144,26 @@ class Interpreter extends AbstractParseTreeVisitor<String>
     @Override
     public String visitDefRes(ccParser.DefResContext ctx) {
         String defHeader = "<h2>" + ctx.d.getText() + "</h2>";
-        String defIdent = ctx.x.getText();
         StringBuilder defList = new StringBuilder();
 
+        String defIdent = ctx.x.getText();
         List<ccParser.SignalListContext> signals = ctx.signalList();
+
         for (int i = 0; i < signals.size(); i++) {
-            defList.append("(" + signals.get(i).getText() + ")");
+            defList.append("(" + visit(signals.get(i)) + ")");
         }
 
         List<ccParser.ExpContext> expressions = ctx.exp();
         for (int i = 0; i < expressions.size(); i++) {
-            defList.append(" = ").append(expressions.get(i).getText());
+            defList.append(" = ").append(visit(ctx.e));
+
         }
 
         return defHeader + defIdent + defList;
     }
+
+
+
 
     @Override
     public String visitSimInputsRes(ccParser.SimInputsResContext ctx) {
@@ -169,9 +188,9 @@ class Interpreter extends AbstractParseTreeVisitor<String>
         List<TerminalNode> signals = ctx.IDENT();
         for (int i = 0; i < signals.size(); i++) {
             if (i == signals.size() - 1) {
-                signalList.append(signals.get(i).getText());
+                signalList.append("\\(" + "\\mathrm{" + signals.get(i).getText() + "}" + "\\)");
             } else {
-                signalList.append(signals.get(i).getText()).append(", ");
+                signalList.append("\\(" + "\\mathrm{" + signals.get(i).getText() + "}" + "\\)").append(", ");
             }
         }
         return signalList.toString();
@@ -179,13 +198,13 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitNOT(ccParser.NOTContext ctx) {
-        ctx.NOT().getText();
-        return "";
+        return "\\(\\neg\\)"+visit(ctx.exp());
+
     }
 
     @Override
     public String visitOR(ccParser.ORContext ctx) {
-        return "";
+        return   "("+visit(ctx.e1)+")" + " \\(\\vee\\) " + "("+visit(ctx.e2)+")" ;
     }
 
     @Override
@@ -195,17 +214,18 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitIDENT(ccParser.IDENTContext ctx) {
-        return "";
+        return  ctx.IDENT().getText();
     }
 
     @Override
     public String visitAND(ccParser.ANDContext ctx) {
-        return "";
+        return "("+visit(ctx.e1)+")" + " \\(\\wedge\\) " + "("+visit(ctx.e2)+")";
     }
+
 
     @Override
     public String visitFUNCTION(ccParser.FUNCTIONContext ctx) {
-        return "";
+        return "\\(\\mathit\\){" + ctx.x.getText() + "}(" + visit(ctx.e1) + ")"; // Italicize the function identifier
     }
 
     @Override
