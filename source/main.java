@@ -75,6 +75,7 @@ class Interpreter extends AbstractParseTreeVisitor<String>
             htmlOutput += visit(defContext) + "\n";
         }
         htmlOutput += visit(ctx.updatesResult()) + "\n";
+        htmlOutput += visit(ctx.simInputsResult()) + "\n";
         htmlOutput += "</body>\n</html>";
 
         return htmlOutput;
@@ -123,7 +124,7 @@ class Interpreter extends AbstractParseTreeVisitor<String>
                     .append("<br>");
         }
 
-        return updatesHeader + updateList.toString();
+        return updatesHeader + updateList;
     }
 
     @Override
@@ -147,7 +148,19 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitSimInputsRes(ccParser.SimInputsResContext ctx) {
-        return "";
+        String simInputsHeader = "<h2>" + ctx.s.getText() + "</h2>\n";
+
+        List<TerminalNode> simInputsIdents = ctx.IDENT();
+        List<TerminalNode> simInputsNumbers = ctx.NUMBER();
+
+        StringBuilder simInputsList = new StringBuilder();
+        for (int i = 0; i < simInputsIdents.size(); i++) {
+            simInputsList.append(simInputsIdents.get(i).getText())
+                    .append(" = ")
+                    .append(simInputsNumbers.get(i).getText())
+                    .append("<br>");
+        }
+        return simInputsHeader + simInputsList;
     }
 
     @Override
