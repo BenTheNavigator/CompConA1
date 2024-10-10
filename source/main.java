@@ -13,13 +13,14 @@ public class main {
 
 
     public static void main(String[] args) throws IOException {
-        // we expect exactly one argument: the name of the input
+
+        // please provide the input file name as an argument with make run ARGS="filename"
         if (args.length != 1) {
             System.err.println("\n");
             System.err.println("Please give as input argument a filename\n");
             System.exit(-1);
         }
-        String filename = "cc.txt";
+        String filename = args[0];
 
         // open the input file
         CharStream input = CharStreams.fromFileName(filename);
@@ -33,13 +34,13 @@ public class main {
         // create a parser
         ccParser parser = new ccParser(tokens);
 
-        // and parse anything from the grammar for "start"
+        // parse from start rule
         ParseTree parseTree = parser.start();
 
         // Construct an interpreter and run it on the parse tree
         Interpreter interpreter = new Interpreter();
         String result = interpreter.visit(parseTree);
-        System.out.println("The result is: " + result);
+        System.out.println(result);
 
         String outputFilename = "output.html";
         try (FileWriter fileWriter = new FileWriter(outputFilename)) {
@@ -77,7 +78,7 @@ class Interpreter extends AbstractParseTreeVisitor<String>
                 + "  }\n"
                 + "</style>\n"
                 + "</head>\n<body>\n"
-                + "<div class=\"content\">\n"; // Start of the content div
+                + "<div class=\"content\">\n";
 
 
         String htmlOutput = html_header;
@@ -90,15 +91,14 @@ class Interpreter extends AbstractParseTreeVisitor<String>
         }
         htmlOutput += visit(ctx.updatesResult()) + "\n";
         htmlOutput += visit(ctx.simInputsResult()) + "\n";
-        htmlOutput += "</body>\n</html>";
+        htmlOutput += "</div></body>\n</html>";
 
         return htmlOutput;
     }
 
     @Override
     public String visitHardwareRes(ccParser.HardwareResContext ctx) {
-        String hardwareHeader = "<h1>" + ctx.x.getText() + "</h1>\n";
-        return hardwareHeader;
+        return "<h1>" + ctx.x.getText() + "</h1>\n";
     }
 
     @Override
@@ -130,23 +130,24 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
         StringBuilder updateList = new StringBuilder();
 
-        for (int i = 0; i < updateIdents.size(); i++) {
-            // Pair each identifier with its corresponding expression
-            updateList.append(updateIdents.get(i).getText())
-                    .append(" = ")
-                    .append(updatesExp.get(i).getText()) // Visit the expression to get its text
+        for (int i = 0; i < updatesExp.size(); i++) {
+            updateList.append("\\(\\mathrm{" + updateIdents.get(i).getText() + "}\\)")
+                    .append(" &larr; ")
+                    .append(visit(ctx.exp(i)))
                     .append("<br>");
         }
 
         return updatesHeader + updateList;
     }
 
+
     @Override
     public String visitDefRes(ccParser.DefResContext ctx) {
         String defHeader = "<h2>" + ctx.d.getText() + "</h2>";
         StringBuilder defList = new StringBuilder();
 
-        String defIdent = ctx.x.getText();
+        String defIdent = "\\(\\mathit{" + ctx.x.getText() + "}\\)";
+
         List<ccParser.SignalListContext> signals = ctx.signalList();
 
         for (int i = 0; i < signals.size(); i++) {
@@ -163,8 +164,6 @@ class Interpreter extends AbstractParseTreeVisitor<String>
     }
 
 
-
-
     @Override
     public String visitSimInputsRes(ccParser.SimInputsResContext ctx) {
         String simInputsHeader = "<h2>" + ctx.s.getText() + "</h2>\n";
@@ -174,7 +173,7 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
         StringBuilder simInputsList = new StringBuilder();
         for (int i = 0; i < simInputsIdents.size(); i++) {
-            simInputsList.append(simInputsIdents.get(i).getText())
+            simInputsList.append("\\(\\mathrm{" + simInputsIdents.get(i).getText() + "}\\)")
                     .append(" = ")
                     .append(simInputsNumbers.get(i).getText())
                     .append("<br>");
@@ -198,44 +197,45 @@ class Interpreter extends AbstractParseTreeVisitor<String>
 
     @Override
     public String visitNOT(ccParser.NOTContext ctx) {
-        return "\\(\\neg\\)"+visit(ctx.exp());
+        return "\\(\\neg\\)" + visit(ctx.exp());
 
     }
 
     @Override
     public String visitOR(ccParser.ORContext ctx) {
-        return   "("+visit(ctx.e1)+")" + " \\(\\vee\\) " + "("+visit(ctx.e2)+")" ;
+        return "(" + visit(ctx.e1) + ")" + " \\(\\vee\\) " + "(" + visit(ctx.e2) + ")";
     }
 
     @Override
     public String visitPARENTHESES(ccParser.PARENTHESESContext ctx) {
-        return "";
+        return "(" + visit(ctx.e1) + ")";
     }
 
     @Override
     public String visitIDENT(ccParser.IDENTContext ctx) {
-        return  ctx.IDENT().getText();
+        return ctx.IDENT().getText();
     }
 
     @Override
     public String visitAND(ccParser.ANDContext ctx) {
-        return "("+visit(ctx.e1)+")" + " \\(\\wedge\\) " + "("+visit(ctx.e2)+")";
+        return "(" + visit(ctx.e1) + ")" + " \\(\\wedge\\) " + "(" + visit(ctx.e2) + ")";
     }
 
 
     @Override
     public String visitFUNCTION(ccParser.FUNCTIONContext ctx) {
-        return "\\(\\mathit\\){" + ctx.x.getText() + "}(" + visit(ctx.e1) + ")"; // Italicize the function identifier
+        // italicize identifier.
+        return "\\(\\mathit{" + ctx.x.getText() + "}\\)" + visit(ctx.e1);
     }
 
     @Override
     public String visitIDENTAPOSTROPHE(ccParser.IDENTAPOSTROPHEContext ctx) {
-        return "";
+        return "\\(\\mathrm{" + ctx.IDENTAPOSTROPHE().getText() + "}\\)";
     }
 
     @Override
     public String visitEXPRESSIONS(ccParser.EXPRESSIONSContext ctx) {
-        return "";
+        return "\\(\\mathrm{" + ctx.getText() + "}\\)";
     }
 }
 

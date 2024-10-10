@@ -21,13 +21,13 @@ ccLexer.class:	ccLexer.java
 	javac -cp $(classpath) $(GENERATED)
 
 grun:	ccLexer.class
-	$(grun) cc start -gui -tokens cc.txt 
+	$(grun) cc start -gui -tokens $(ARGS)
 
 main.class:	ccLexer.java main.java
 	javac -cp $(classpath) $(GENERATED) main.java
 
 run:	main.class
-	java -cp $(classpath) main cc.txt
+	java -cp $(classpath) main $(ARGS)
 
 	
 clean: 
