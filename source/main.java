@@ -42,6 +42,7 @@ public class main {
         String result = interpreter.visit(parseTree);
         System.out.println(result);
 
+        // write the result to a html file
         String outputFilename = "output.html";
         try (FileWriter fileWriter = new FileWriter(outputFilename)) {
             fileWriter.write(result);
@@ -198,7 +199,6 @@ class Interpreter extends AbstractParseTreeVisitor<String>
     @Override
     public String visitNOT(ccParser.NOTContext ctx) {
         return "\\(\\neg\\)" + visit(ctx.exp());
-
     }
 
     @Override
